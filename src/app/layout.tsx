@@ -24,7 +24,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <img
+          src="/bg.webp"
+          alt="bg"
+          className="fixed inset-0 h-full w-full object-cover opacity-50 mix-blend-hard-light select-none"
+          draggable={false}
+        />
+        {children}
+      </body>
     </html>
     // <html lang="ko" className={abcrom.variable}>
     //   <body className={abcrom.className}>{children}</body>
