@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body>
-        <main className="relative mx-auto min-h-screen max-w-xl bg-[#a08e80]">
+        <main className="relative mx-auto min-h-screen max-w-xl overflow-hidden bg-[#a08e80]">
           <img
             src="/bg.webp"
             alt="bg"
