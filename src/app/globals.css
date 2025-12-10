@@ -10,7 +10,7 @@
 html,
 body,
 #root {
-  @apply fixed h-svh w-full overflow-hidden bg-[#D7D3CE] break-keep;
+  @apply fixed h-svh w-full overflow-hidden bg-[#3f3c38] break-keep;
 }
 
 img {

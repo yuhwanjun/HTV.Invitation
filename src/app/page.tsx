@@ -80,9 +80,9 @@ export default function Home() {
 
   return (
     <>
-      <InfoTab state={isTabOpen[0]} onToggle={() => toggleTab(0)} />
+      {/* <InfoTab state={isTabOpen[0]} onToggle={() => toggleTab(0)} />
       <IntroTab state={isTabOpen[1]} onToggle={() => toggleTab(1)} />
-      <MapTab state={isTabOpen[2]} onToggle={() => toggleTab(2)} />
+      <MapTab state={isTabOpen[2]} onToggle={() => toggleTab(2)} /> */}
     </>
   );
 }
