@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 // import localFont from 'next/font/local';
 import './globals.css';
+import Image from 'next/image';
 
 // const abcrom = localFont({
 //   src: [
@@ -26,8 +27,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <body>
         <main className="relative mx-auto min-h-screen max-w-xl overflow-hidden bg-[#a08e80]">
-          <img
+          <Image
             src="/bg.webp"
+            width={1000}
+            height={1000}
             alt="bg"
             className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-color-dodge select-none"
             draggable={false}

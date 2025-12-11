@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import Image from 'next/image';
 
 /**
  * info tab
@@ -13,20 +14,38 @@ function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
   return (
     <div
       className={cn(
-        'absolute top-[120px] left-[-20%] flex h-[calc(100svh-100px)] min-h-[800px] w-[140%] origin-top-right -rotate-3 flex-col items-start justify-start overflow-hidden border-t border-black bg-[#D7D3CE] px-[calc(20%+18px)] py-3 transition-all duration-300',
-        state === 'open' && 'translate-y-0',
-        state === 'close' && 'translate-y-[calc(100svh-210px)]',
+        'absolute top-full left-1/2 h-svh w-full -translate-x-1/2 overflow-hidden transition-all duration-800',
+        state === 'open' && '-translate-y-full',
+        state === 'close' && '-translate-y-[180px]',
       )}>
-      <button onClick={onToggle} className="mb-4 rounded border border-black bg-white px-4 py-2 hover:bg-gray-100">
-        {state === 'open' ? '닫기' : '열기'}
-      </button>
-      <div className="grid grid-cols-3 gap-x-4">
-        <p className="col-span-1">12.19-21</p>
-        <p className="col-span-2">
-          시드스페이스 <br /> 영등포구 버드나루로 12가길 43
-        </p>
+      <Image
+        src="/paper.webp"
+        width={800}
+        height={1300}
+        alt="paper background"
+        className="pointer-events-none absolute top-0 bottom-0 left-1/2 z-0 h-auto min-h-full w-[150%] min-w-full origin-top -translate-x-1/2 scale-120 object-cover object-top select-none xl:w-full"
+        draggable={false}
+      />
+      <div className="absolute bottom-0 left-0 h-full w-full px-4 pt-30">
+        <button
+          onClick={onToggle}
+          className="relative z-10 mb-4 rounded border border-black bg-white py-2 hover:bg-gray-100">
+          {state === 'open' ? '닫기' : '열기'}
+        </button>
+        <div className="relative z-10 grid w-full grid-cols-3 gap-x-4 text-black">
+          <p className="col-span-1">12.19-21</p>
+          <p className="col-span-2">
+            시드스페이스 <br /> 영등포구 버드나루로 12가길 43
+          </p>
+        </div>
+        <Image
+          src="htb-0.svg"
+          width={1000}
+          height={1000}
+          alt="info-icon"
+          className="absolute bottom-[60px] left-1/2 z-10 max-w-[90%] -translate-x-1/2"
+        />
       </div>
-      <img className="absolute bottom-[60px] left-[16%] w-4/5 max-w-[90%]" src="htb-0.svg" alt="info-icon" />
     </div>
   );
 }
