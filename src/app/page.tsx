@@ -26,7 +26,7 @@ function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
         className="pointer-events-none absolute top-0 bottom-0 left-1/2 z-0 h-auto min-h-full w-[150%] min-w-full origin-top -translate-x-1/2 scale-120 object-cover object-top select-none xl:w-full"
         draggable={false}
       />
-      <div className="absolute bottom-0 left-0 h-full w-full px-4 pt-30">
+      <div className="mx-auto h-full w-full max-w-lg px-4 pt-30">
         <button
           onClick={onToggle}
           className="relative z-10 mb-4 rounded border border-black bg-white py-2 hover:bg-gray-100">
