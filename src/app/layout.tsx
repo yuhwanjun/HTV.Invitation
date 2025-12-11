@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={onulHeugdan.variable}>
       <body className={onulHeugdan.className}>
-        <main className="relative mx-auto min-h-screen max-w-xl overflow-hidden bg-[#ededec]">
+        <main className="relative mx-auto min-h-svh max-w-xl overflow-hidden bg-[#ededec]">
           <Image
             src="/bg.webp"
             width={1000}
