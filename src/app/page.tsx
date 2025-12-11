@@ -43,7 +43,8 @@ function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
           width={1000}
           height={1000}
           alt="info-icon"
-          className="absolute bottom-[60px] left-1/2 z-10 max-w-[90%] -translate-x-1/2"
+          className="absolute bottom-0 left-1/2 z-10 max-w-[90%] -translate-x-1/2 select-none"
+          draggable={false}
         />
       </div>
     </div>

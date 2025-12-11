@@ -1,21 +1,18 @@
 import type { Metadata } from 'next';
-// import localFont from 'next/font/local';
+import localFont from 'next/font/local';
 import './globals.css';
 import Image from 'next/image';
 
-// const abcrom = localFont({
-//   src: [
-//     { path: '../../public/fonts/ABCROM-NormalRegular.woff2', weight: '400', style: 'normal' },
-//     { path: '../../public/fonts/ABCROM-NormalMedium.woff2', weight: '500', style: 'normal' },
-//     { path: '../../public/fonts/ABCROM-NormalBook.woff2', weight: '600', style: 'normal' },
-//     { path: '../../public/fonts/ABCROM-NormalBold.woff2', weight: '700', style: 'normal' },
-//   ],
-//   display: 'swap',
-//   variable: '--font-abcrom',
-//   fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-//   adjustFontFallback: 'Arial', // 폰트 메트릭 조정으로 레이아웃 시프트 방지
-//   preload: true, // 중요한 폰트 파일 자동 preload
-// });
+const onulHeugdan = localFont({
+  src: [
+    { path: '../../public/fonts/OnulHeugdan-Regular.woff', weight: '400', style: 'normal' },
+    { path: '../../public/fonts/OnulHeugdan-Bold.woff', weight: '700', style: 'normal' },
+    { path: '../../public/fonts/OnulHeugdan-Black.woff', weight: '900', style: 'normal' },
+  ],
+  display: 'swap',
+  variable: '--font-onul-heugdan',
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+});
 
 export const metadata: Metadata = {
   title: '화톳불',
@@ -24,8 +21,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
-      <body>
+    <html lang="ko" className={onulHeugdan.variable}>
+      <body className={onulHeugdan.className}>
         <main className="relative mx-auto min-h-screen max-w-xl overflow-hidden bg-[#a08e80]">
           <Image
             src="/bg.webp"
@@ -39,8 +36,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
       </body>
     </html>
-    // <html lang="ko" className={abcrom.variable}>
-    //   <body className={abcrom.className}>{children}</body>
-    // </html>
   );
 }
