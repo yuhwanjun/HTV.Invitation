@@ -72,8 +72,8 @@ function IntroTab({ state, onToggle }: { state: string; onToggle: () => void }) 
       <div className="h-full w-full rotate-1 overflow-y-auto pt-12 pr-8 pb-20 pl-26">
         <div className="relative text-[14.8px] leading-[194%] font-bold text-black">
           <p>
-            ‘화톳불(Hwatotvul)'은 모험가들이 모인 길드로, 길드원들은 각자 느낀 게임의 경험을 현실이라는 조건 아래
-            치밀하게 고민한 흔적과 전리품들을 선보인다.
+            &apos;화톳불(Hwatotvul)&apos;은 모험가들이 모인 길드로, 길드원들은 각자 느낀 게임의 경험을 현실이라는 조건
+            아래 치밀하게 고민한 흔적과 전리품들을 선보인다.
             <br />
             <br />
             나는 게임 세계의 데이터를 저장하고, 불러오며, 때로는 덮어쓰는 과정에서 최근과 오래된 기록을 뒤얽히게 한다.
@@ -124,15 +124,13 @@ function MapTab({ state, onToggle }: { state: string; onToggle: () => void }) {
   );
 }
 
-function MailTab({ state, onToggle }: { state: string; onToggle: () => void }) {
+function MailTab({ state }: { state: string }) {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus(null);
 
     try {
       const response = await fetch('/api/send-email', {
@@ -146,13 +144,14 @@ function MailTab({ state, onToggle }: { state: string; onToggle: () => void }) {
       const data = await response.json();
 
       if (response.ok) {
-        setSubmitStatus({ type: 'success', message: '이메일이 성공적으로 발송되었습니다!' });
         setEmail('');
       } else {
-        setSubmitStatus({ type: 'error', message: data.error || '이메일 발송에 실패했습니다.' });
+        // Handle error silently or show message if needed
+        console.error('Email send failed:', data.error);
       }
-    } catch (error) {
-      setSubmitStatus({ type: 'error', message: ' 오류가 발생했습니다.' });
+    } catch {
+      // Handle error silently or show message if needed
+      console.error('Network error occurred');
     } finally {
       setIsSubmitting(false);
     }
@@ -191,7 +190,6 @@ function MailTab({ state, onToggle }: { state: string; onToggle: () => void }) {
 }
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   // loading, open, close 3가지 상태 (InfoTab, IntroTab, MapTab, MailTab)
   const [isTabOpen, setIsTabOpen] = useState<Array<string>>(['open', 'open', 'open', 'open']);
 
@@ -209,7 +207,7 @@ export default function Home() {
 
   return (
     <>
-      <MailTab state={isTabOpen[3]} onToggle={() => toggleTab(3)} />
+      <MailTab state={isTabOpen[3]} />
       <MapTab state={isTabOpen[2]} onToggle={() => toggleTab(2)} />
       <IntroTab state={isTabOpen[1]} onToggle={() => toggleTab(1)} />
       <InfoTab state={isTabOpen[0]} onToggle={() => toggleTab(0)} />

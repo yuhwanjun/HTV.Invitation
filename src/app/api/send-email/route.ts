@@ -1,7 +1,13 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResendInstance = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    return null;
+  }
+  return new Resend(apiKey);
+};
 
 // 미리 정의된 이메일 내용
 const EMAIL_SUBJECT = '화톳불 초대장';
@@ -29,6 +35,12 @@ export async function POST(request: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: '올바른 이메일 형식이 아닙니다.' }, { status: 400 });
+    }
+
+    // Resend 인스턴스 확인
+    const resend = getResendInstance();
+    if (!resend) {
+      return NextResponse.json({ error: '이메일 서비스가 설정되지 않았습니다.' }, { status: 500 });
     }
 
     // Resend로 이메일 발송
