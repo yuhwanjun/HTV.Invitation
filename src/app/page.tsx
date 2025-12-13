@@ -1,8 +1,122 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
+
+const LOADING_FRAME_COUNT = 51; // 0 ~ 50
+
+function LoadingAnimation({ onComplete }: { onComplete: () => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isFirstLoaded, setIsFirstLoaded] = useState(false);
+  const [isAllLoaded, setIsAllLoaded] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const frameRef = useRef(0);
+  const animationRef = useRef<number | null>(null);
+
+  // 첫 번째 이미지 먼저 로드 후 나머지 이미지 로드
+  useEffect(() => {
+    const images: HTMLImageElement[] = [];
+
+    // 첫 번째 이미지 로드
+    const firstImg = new window.Image();
+    firstImg.src = `/loading/loading-0.webp`;
+    firstImg.onload = () => {
+      images[0] = firstImg;
+
+      // 첫 번째 이미지를 캔버스에 표시
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          canvas.width = firstImg.width;
+          canvas.height = firstImg.height;
+          ctx.drawImage(firstImg, 0, 0, canvas.width, canvas.height);
+        }
+      }
+      setIsFirstLoaded(true);
+
+      // 나머지 이미지 로드
+      let loadedCount = 1;
+      for (let i = 1; i < LOADING_FRAME_COUNT; i++) {
+        const img = new window.Image();
+        img.src = `/loading/loading-${i}.webp`;
+        img.onload = () => {
+          loadedCount++;
+          if (loadedCount === LOADING_FRAME_COUNT) {
+            imagesRef.current = images;
+            setIsAllLoaded(true);
+          }
+        };
+        images[i] = img;
+      }
+    };
+  }, []);
+
+  // 캔버스 애니메이션 (모든 이미지 로드 완료 후)
+  useEffect(() => {
+    if (!isAllLoaded || !canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const images = imagesRef.current;
+    let lastTime = 0;
+    const frameDuration = 1000 / 12; // 12fps
+
+    const animate = (currentTime: number) => {
+      if (currentTime - lastTime >= frameDuration) {
+        lastTime = currentTime;
+
+        const img = images[frameRef.current];
+        if (img) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+
+        frameRef.current++;
+
+        // 애니메이션 완료 -> 1초 딜레이 후 페이드아웃
+        if (frameRef.current >= LOADING_FRAME_COUNT) {
+          setTimeout(() => {
+            setIsFadingOut(true);
+          }, 1000);
+          return;
+        }
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isAllLoaded]);
+
+  // 페이드아웃 완료 후 onComplete 호출
+  const handleTransitionEnd = () => {
+    if (isFadingOut) {
+      onComplete();
+    }
+  };
+
+  return (
+    <div
+      className={cn(
+        'absolute inset-0 z-50 flex items-center justify-center bg-[#ededec] transition-opacity duration-600',
+        isFadingOut ? 'opacity-0' : 'opacity-100',
+      )}
+      onTransitionEnd={handleTransitionEnd}>
+      <canvas ref={canvasRef} className="h-auto max-w-full scale-130 rotate-90 object-contain" />
+    </div>
+  );
+}
 
 /**
  * info tab
@@ -124,7 +238,7 @@ function MapTab({ state, onToggle }: { state: string; onToggle: () => void }) {
   );
 }
 
-function MailTab({ state }: { state: string }) {
+function MailTab() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -158,12 +272,7 @@ function MailTab({ state }: { state: string }) {
   };
 
   return (
-    <div
-      className={cn(
-        'top-0 left-0 flex h-svh w-full items-center justify-center transition-opacity duration-400',
-        state === 'open' && 'opacity-100',
-        state === 'close' && 'opacity-0',
-      )}>
+    <div className="top-0 left-0 flex h-svh w-full items-center justify-center">
       <div className="relative w-full overflow-hidden px-16 text-center">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -190,8 +299,10 @@ function MailTab({ state }: { state: string }) {
 }
 
 export default function Home() {
-  // loading, open, close 3가지 상태 (InfoTab, IntroTab, MapTab, MailTab)
-  const [isTabOpen, setIsTabOpen] = useState<Array<string>>(['open', 'open', 'open', 'open']);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(true);
+  // open, close 상태 (InfoTab, IntroTab, MapTab)
+  const [isTabOpen, setIsTabOpen] = useState<Array<string>>(['close', 'close', 'close']);
 
   const toggleTab = (index: number) => {
     setIsTabOpen((prev) => {
@@ -202,12 +313,42 @@ export default function Home() {
   };
 
   const openAllTabs = () => {
-    setIsTabOpen(['open', 'open', 'open', 'open']);
+    setIsTabOpen(['open', 'open', 'open']);
   };
+
+  const handleLoadingComplete = useCallback(() => {
+    setIsLoading(false);
+    // 순차적으로 탭 열기: Map -> Intro -> Info
+    setTimeout(() => {
+      setIsTabOpen((prev) => {
+        const newState = [...prev];
+        newState[2] = 'open'; // MapTab
+        return newState;
+      });
+    }, 100);
+    setTimeout(() => {
+      setIsTabOpen((prev) => {
+        const newState = [...prev];
+        newState[1] = 'open'; // IntroTab
+        return newState;
+      });
+    }, 500);
+    setTimeout(() => {
+      setIsTabOpen((prev) => {
+        const newState = [...prev];
+        newState[0] = 'open'; // InfoTab
+        return newState;
+      });
+    }, 900);
+    // 마지막 애니메이션 완료 후 상호작용 허용 (InfoTab 900ms + duration-800)
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 1800);
+  }, []);
 
   return (
     <>
-      <MailTab state={isTabOpen[3]} />
+      <MailTab />
       <MapTab state={isTabOpen[2]} onToggle={() => toggleTab(2)} />
       <IntroTab state={isTabOpen[1]} onToggle={() => toggleTab(1)} />
       <InfoTab state={isTabOpen[0]} onToggle={() => toggleTab(0)} />
@@ -221,6 +362,8 @@ export default function Home() {
           draggable={false}
         />
       </button>
+      {isLoading && <LoadingAnimation onComplete={handleLoadingComplete} />}
+      {isAnimating && <div className="absolute inset-0 z-40" />}
     </>
   );
 }
