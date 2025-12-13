@@ -152,7 +152,7 @@ function MailTab({ state, onToggle }: { state: string; onToggle: () => void }) {
         setSubmitStatus({ type: 'error', message: data.error || '이메일 발송에 실패했습니다.' });
       }
     } catch (error) {
-      setSubmitStatus({ type: 'error', message: '네트워크 오류가 발생했습니다.' });
+      setSubmitStatus({ type: 'error', message: ' 오류가 발생했습니다.' });
     } finally {
       setIsSubmitting(false);
     }
