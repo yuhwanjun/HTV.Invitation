@@ -71,3 +71,38 @@ html {
     border-radius: 9999px;
   }
 }
+
+/* Shimmer effect for buttons */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+.shimmer-btn {
+  overflow: hidden;
+}
+
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  mix-blend-mode: overlay;
+  animation: shimmer 2s infinite;
+  animation-delay: 0.5s;
+  pointer-events: none;
+}

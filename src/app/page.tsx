@@ -125,6 +125,11 @@ function LoadingAnimation({ onComplete }: { onComplete: () => void }) {
  */
 
 function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
+  const [clicked, setClicked] = useState(false);
+  const handleClick = () => {
+    setClicked(true);
+    onToggle();
+  };
   return (
     <div
       className={cn(
@@ -147,7 +152,7 @@ function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
             width={1000}
             height={1000}
             alt="info-icon"
-            className="w-full object-contain select-none"
+            className="w-full scale-[87%] object-contain select-none"
             draggable={false}
           />
           <Image
@@ -155,19 +160,26 @@ function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
             width={1000}
             height={1000}
             alt="info"
-            className="w-full translate-y-16 object-contain select-none"
+            className="w-full translate-y-16 scale-[87%] object-contain select-none"
             draggable={false}
           />
         </div>
       </div>
       <div
-        onClick={onToggle}
-        className="absolute top-[-100px] right-2 flex h-10 w-20 items-center justify-center bg-amber-300"></div>
+        onClick={handleClick}
+        className={cn('absolute top-[-70px] right-2 h-12 w-28 cursor-pointer', !clicked && 'shimmer-btn')}>
+        <Image src="/btn.webp" width={100} height={64} alt="toggle button" className="h-full w-full object-contain" />
+      </div>
     </div>
   );
 }
 
 function IntroTab({ state, onToggle }: { state: string; onToggle: () => void }) {
+  const [clicked, setClicked] = useState(false);
+  const handleClick = () => {
+    setClicked(true);
+    onToggle();
+  };
   return (
     <div
       className={cn(
@@ -211,8 +223,10 @@ function IntroTab({ state, onToggle }: { state: string; onToggle: () => void }) 
         </div>
       </div>
       <div
-        onClick={onToggle}
-        className="absolute top-2/3 left-0 flex h-10 w-20 items-center justify-center bg-amber-300"></div>
+        onClick={handleClick}
+        className={cn('absolute top-2/3 left-1 h-12 w-28 -rotate-90 cursor-pointer', !clicked && 'shimmer-btn')}>
+        <Image src="/btn.webp" width={100} height={64} alt="toggle button" className="h-full w-full object-contain" />
+      </div>
     </div>
   );
 }
@@ -222,16 +236,16 @@ function MapTab({ state, onToggle }: { state: string; onToggle: () => void }) {
     <div
       onClick={onToggle}
       className={cn(
-        'absolute top-0 right-0 h-svh w-full origin-top-right transition-all duration-800',
+        'absolute top-0 -right-2 h-svh w-full origin-top-right transition-all duration-800',
         state === 'open' && 'translate-x-[-100px] translate-y-[40px] -rotate-10',
         state === 'close' && '-translate-x-[calc(100%-100px)] translate-y-[calc(100%-200px)] rotate-12',
       )}>
       <Image
-        src="/map.webp"
+        src="/party.webp"
         width={800}
         height={1300}
         alt="paper background"
-        className="pointer-events-none absolute top-0 h-full origin-bottom-right translate-x-8 scale-115 object-contain select-none"
+        className="pointer-events-none absolute top-0 h-full origin-bottom-right translate-x-8 scale-110 object-contain select-none"
         draggable={false}
       />
     </div>
