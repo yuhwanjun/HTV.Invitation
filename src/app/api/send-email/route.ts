@@ -19,7 +19,7 @@ const EMAIL_MESSAGE = `
 또한, 화톳불 프로젝트에 사용된 라틴문자 타입
 ’HWATOTVUL’을 선물로 드립니다.
 ———————————————
-<화톳불 둘러앉기 Hwatotvul sit around>
+《화톳불 둘러앉기 Hwatotvul sit around》
 ———————————————
 2025.12.19.(금). 10:00-20:00, Opening Rave 20:00-Until dawn
 2025.12.20.(토). 12:00-20:00
