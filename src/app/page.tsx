@@ -152,7 +152,7 @@ function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
             width={1000}
             height={1000}
             alt="info-icon"
-            className="w-full scale-[87%] object-contain select-none"
+            className="w-full scale-[90%] object-contain select-none"
             draggable={false}
           />
           <Image
@@ -160,15 +160,23 @@ function InfoTab({ state, onToggle }: { state: string; onToggle: () => void }) {
             width={1000}
             height={1000}
             alt="info"
-            className="w-full translate-y-16 scale-[87%] object-contain select-none"
+            className="w-full translate-y-16 scale-[90%] object-contain select-none"
             draggable={false}
           />
         </div>
       </div>
       <div
         onClick={handleClick}
-        className={cn('absolute top-[-70px] right-2 h-12 w-28 cursor-pointer', !clicked && 'shimmer-btn')}>
-        <Image src="/btn.webp" width={100} height={64} alt="toggle button" className="h-full w-full object-contain" />
+        className={cn('absolute top-[-70px] right-2 h-12 w-28 cursor-pointer', !clicked && 'shimmer-masked')}
+        style={{ '--shimmer-mask': "url('/btn.webp')" } as React.CSSProperties}>
+        <Image
+          src="/btn.webp"
+          width={100}
+          height={64}
+          alt="toggle button"
+          className="h-full w-full object-contain"
+          draggable={false}
+        />
       </div>
     </div>
   );
@@ -195,7 +203,7 @@ function IntroTab({ state, onToggle }: { state: string; onToggle: () => void }) 
         className="pointer-events-none absolute top-0 left-0 z-0 h-full origin-bottom-left translate-y-30 scale-150 rotate-1 object-cover object-bottom-left select-none"
         draggable={false}
       />
-      <div className="h-full w-full rotate-1 overflow-y-auto pt-12 pr-8 pb-20 pl-26">
+      <div className="h-full w-full rotate-1 overflow-y-auto pt-12 pr-8 pb-20 pl-26 sm:pl-[calc(3vw+7vh+20px)]">
         <div className="relative text-[14.8px] leading-[194%] font-bold text-black">
           <p>
             &apos;화톳불(Hwatotvul)&apos;은 모험가들이 모인 길드로, 길드원들은 각자 느낀 게임의 경험을 현실이라는 조건
@@ -224,30 +232,55 @@ function IntroTab({ state, onToggle }: { state: string; onToggle: () => void }) 
       </div>
       <div
         onClick={handleClick}
-        className={cn('absolute top-2/3 left-1 h-12 w-28 -rotate-90 cursor-pointer', !clicked && 'shimmer-btn')}>
-        <Image src="/btn.webp" width={100} height={64} alt="toggle button" className="h-full w-full object-contain" />
+        className={cn('absolute top-2/3 left-0 h-12 w-28 -rotate-90 cursor-pointer', !clicked && 'shimmer-masked')}
+        style={{ '--shimmer-mask': "url('/btn.webp')" } as React.CSSProperties}>
+        <Image
+          src="/btn.webp"
+          width={100}
+          height={64}
+          alt="toggle button"
+          className="h-full w-full object-contain"
+          draggable={false}
+        />
       </div>
     </div>
   );
 }
 
 function MapTab({ state, onToggle }: { state: string; onToggle: () => void }) {
+  const [clicked, setClicked] = useState(false);
+  const handleClick = () => {
+    setClicked(true);
+    onToggle();
+  };
   return (
     <div
-      onClick={onToggle}
       className={cn(
-        'absolute top-0 -right-2 h-svh w-full origin-top-right transition-all duration-800',
-        state === 'open' && 'translate-x-[-100px] translate-y-[40px] -rotate-10',
-        state === 'close' && '-translate-x-[calc(100%-100px)] translate-y-[calc(100%-200px)] rotate-12',
+        'absolute top-24 -left-13 h-fit max-h-svh min-h-0 w-full origin-top-right transition-all duration-800',
+        state === 'open' && 'translate-x-[-5%] -rotate-8',
+        state === 'close' && '-translate-x-[calc(100%-200px)] translate-y-[calc(65vh)] rotate-12',
       )}>
       <Image
         src="/party.webp"
         width={800}
         height={1300}
         alt="paper background"
-        className="pointer-events-none absolute top-0 h-full origin-bottom-right translate-x-8 scale-110 object-contain select-none"
+        className="pointer-events-none relative top-0 origin-top-right translate-x-8 scale-115 object-contain select-none"
         draggable={false}
       />
+      <div
+        onClick={handleClick}
+        className={cn('absolute -top-4 right-0 h-12 w-28 cursor-pointer', !clicked && 'shimmer-masked')}
+        style={{ '--shimmer-mask': "url('/btn.webp')" } as React.CSSProperties}>
+        <Image
+          src="/btn.webp"
+          width={100}
+          height={64}
+          alt="toggle button"
+          className="h-full w-full object-contain"
+          draggable={false}
+        />
+      </div>
     </div>
   );
 }
@@ -303,7 +336,7 @@ function MailTab() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="border-b border-black px-2 pb-1 font-bold disabled:cursor-not-allowed disabled:opacity-50">
+            className="border-b border-black px-2 pb-1 font-bold text-black transition-colors hover:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50">
             {isSubmitting ? '발송 중...' : '발송'}
           </button>
         </form>
