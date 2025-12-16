@@ -337,7 +337,7 @@ function MailTab() {
             type="submit"
             disabled={isSubmitting}
             className="border-b border-black px-2 pb-1 font-bold text-black transition-colors hover:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50">
-            {isSubmitting ? '발송 중...' : '발송'}
+            {isSubmitting ? '발송 중...' : '초대장 받기'}
           </button>
         </form>
       </div>
